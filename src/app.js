@@ -1,14 +1,21 @@
 import express from 'express';
-const app = express();
+import fileUpload from 'express-fileupload';
+
 import userRouter from './routes/user.routes.js';
-// *Middleware
 
+const app = express();
+
+// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/',
+  }),
+);
+
+// Routes
 app.use('/api/v1/users', userRouter);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 export default app;
