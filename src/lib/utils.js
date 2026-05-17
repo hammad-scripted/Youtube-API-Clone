@@ -6,6 +6,6 @@ export const generateToken = async (userId) => {
   return token;
 };
 
-const verifyToken = (token) => {
+export const verifyToken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRET_KEY);
 };
