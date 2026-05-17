@@ -163,7 +163,7 @@ export const uploadVideo = async (req, res) => {
       user_id: req.user.userId, // Associate video with authenticated user
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: 'Video uploaded successfully',
       video: newVideo,
@@ -173,6 +173,42 @@ export const uploadVideo = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'An error occurred while uploading the video',
+    });
+  }
+};
+
+export const updateVideo = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const video = await videoModel.findById(id);
+
+    if (!video) {
+      return res.status(404).json({
+        success: false,
+        message: 'Video not found',
+      });
+    }
+
+    const updatedVideo = await videoModel.findByIdAndUpdate(id, req.body, {
+      returnDocument: 'after',
+    });
+    if (!updatedVideo) {
+      return res.status(404).json({
+        success: false,
+        message: 'Video not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Video updated successfully',
+      video: updatedVideo,
+    });
+  } catch (error) {
+    console.error('Video update error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while updating the video',
     });
   }
 };
