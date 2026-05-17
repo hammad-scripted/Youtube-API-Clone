@@ -212,3 +212,21 @@ export const updateVideo = async (req, res) => {
     });
   }
 };
+
+export const getAllVideos = async (req, res) => {
+  try {
+    const videos = await videoModel.find();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Videos fetched successfully',
+      videos,
+    });
+  } catch (error) {
+    console.error('Video fetch error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while fetching videos',
+    });
+  }
+};

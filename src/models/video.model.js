@@ -40,22 +40,7 @@ const videoSchema = new Schema(
         trim: true,
       },
     ],
-    likes: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    dislikes: {
-      type: Number,
-      default: 0,
 
-      min: 0,
-    },
-    views: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
     category: {
       type: String,
       required: true,
@@ -81,4 +66,17 @@ const videoSchema = new Schema(
   },
 );
 
+videoSchema.virtual('likes').get(function () {
+  return this.likedBy.length;
+});
+videoSchema.virtual('dislikes').get(function () {
+  return this.dislikedBy.length;
+});
+videoSchema.virtual('views').get(function () {
+  return this.viewedBy.length;
+});
+
+// Ensure virtual fields are included in the JSON representation of the document
+
+videoSchema.set('toJSON', { virtuals: true });
 export default model('Video', videoSchema);
